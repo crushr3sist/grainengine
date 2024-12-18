@@ -1,0 +1,13 @@
+CompileFlags:
+  Add: [-std=c++20, -Wall, -Wextra, -Werror]
+Index:
+  Background: On  
+  ThreadCount: 4         
+ClangTidy:
+  CheckOptions:
+    - key: modernize-use-nullptr
+    - key: readability-identifier-naming
+    - key: cppcoreguidelines-pro-type-static-cast-downcast
+    - key: performance-unnecessary-value-param
+Diagnostics:
+  Suppress: [missing-include]

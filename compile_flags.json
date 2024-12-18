@@ -1,0 +1,14 @@
+[
+  "-std=c++20",
+  "-I./include",
+  "-I./libs/GLFW/include",
+  "-I./libs/glad/include",
+  "-Wall",
+  "-Wextra",
+  "-Werror",
+  "-DDEBUG",
+  "-O2",
+  "-g",
+  "-fexceptions",
+  "-pthread"
+]
