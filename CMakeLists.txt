@@ -16,7 +16,7 @@ set(CMAKE_GENERATOR_TOOLSET "v143")
 set(CMAKE_VS_PLATFORM_TOOLSET "v143")
 set(CMAKE_GENERATOR_PLATFORM "x64")
 
-project(shader_prac)
+project(grainengine)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -37,15 +37,20 @@ if(MINGW)
 else()
     set(GLFW_LIBRARY "${CMAKE_SOURCE_DIR}/libs/GLFW/lib-vc2022/glfw3.lib")
 endif()
+# Add GLM
+set(GLM_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/libs/glm")
 
 # Add source files
 file(GLOB_RECURSE SOURCES "src/*.cpp")
+file(GLOB_RECURSE SHADERS "src/*.shader")
+
 file(GLOB_RECURSE HEADERS "include/*.hpp" "include/*.h")
 
 # Create executable
 add_executable(${PROJECT_NAME} 
     ${SOURCES} 
     ${HEADERS}
+    ${SHADERS}
     ${GLAD_SOURCE}
 )
 
@@ -67,7 +72,6 @@ target_include_directories(${PROJECT_NAME} PRIVATE
     ${GLFW_INCLUDE_DIR}
     ${GLAD_INCLUDE_DIR}
 )
-
 # Link libraries
 target_link_libraries(${PROJECT_NAME} PRIVATE
     OpenGL::GL
@@ -84,5 +88,14 @@ COMMAND ${CMAKE_COMMAND} -E remove "${CMAKE_BINARY_DIR}/CMakeCache.txt"
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
     "${CMAKE_SOURCE_DIR}/libs/GLFW/lib-vc2022/glfw3.dll"
+    $<TARGET_FILE_DIR:${PROJECT_NAME}>
+)
+
+file(GLOB_RECURSE SHADER_FILES "${CMAKE_SOURCE_DIR}/src/shaders/*.shader")
+
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:${PROJECT_NAME}>
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    ${SHADER_FILES}
     $<TARGET_FILE_DIR:${PROJECT_NAME}>
 )
